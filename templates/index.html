@@ -1,0 +1,24 @@
+<!DOCTYPE html> <!-- 声明文档类型为 HTML5 -->
+<html lang="en"> <!-- 定义页面语言为英语 -->
+<head>
+    <meta charset="UTF-8"> <!-- 设置字符编码为 UTF-8，支持多语言字符集 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 设置视口，确保页面在移动设备上正确显示 -->
+    <title>Local File Server</title> <!-- 页面标题，显示在浏览器标签页上 -->
+</head>
+<body>
+<h1>Upload and Download Files</h1> <!-- 页面主标题，显示为"上传和下载文件" -->
+
+<!-- 文件上传表单 -->
+<form method="POST" enctype="multipart/form-data"> <!-- 定义表单，使用 POST 方法提交，支持文件上传 -->
+    <input type="file" name="file"> <!-- 文件选择输入框，允许用户选择文件 -->
+    <input type="submit" value="Upload"> <!-- 提交按钮，点击后提交表单上传文件 -->
+</form>
+
+<h2>Files Available for Download</h2> <!-- 子标题，显示为"可供下载的文件" -->
+<ul> <!-- 文件列表 -->
+    {% for filename in files %} <!-- 循环遍历 `files` 列表，渲染每个文件 -->
+    <li><a href="{{ url_for('download', filename=filename) }}">{{ filename }}</a></li> <!-- 每个文件以链接的形式显示，点击链接下载文件 -->
+    {% endfor %} <!-- 结束文件遍历 -->
+</ul>
+</body>
+</html>
