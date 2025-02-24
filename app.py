@@ -28,10 +28,9 @@ def delete_file(filename):
 
 
 # 判断该脚本是否是直接运行的（而非作为模块导入）
-# 如果是，启动 Flask 开发服务器。
 if __name__ == '__main__':
     # app.run() 启动 Flask 服务器
     # debug = True：启用调试模式，方便开发时查看错误信息并自动重载。
     # host='0.0.0.0'：使应用监听所有网络接口（即允许外部访问）。
     # port=5001：设置应用运行在 5001 端口。
-    app.run(debug=True, host='0.0.0.0', port=5002)  # 启动 Flask 开发服务器，设置调试模式，监听所有 IP 地址，端口为 5001
+    app.run(debug=True, host='0.0.0.0', port=5001)  # 启动 Flask 开发服务器，设置调试模式，监听所有 IP 地址，端口为 5001

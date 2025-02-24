@@ -41,14 +41,14 @@ pip3 install Flask
 
 # or
 # 在某些系统限制的情况下
-python3 -m venv flask-env     # 创建虚拟环境
-source flask-env/bin/activate # 激活虚拟环境
+python3 -m venv .venv         # 创建虚拟环境
+source .venv/bin/activate     # 激活虚拟环境
 python3 -m pip install Flask  # 在虚拟环境中安装 Flask
 ```
 
 ---
 
-<!-- <p><details><summary>【✦ ✧ ✩ ❌ Error ⚠️ ✩ ✧ ✦】</summary><p> -->
+<p><details><summary>【✦ ✧ ✩ ❌ Error ⚠️ ✩ ✧ ✦】</summary><p>
 
 #### 2.1.1. 安装报错
 
@@ -135,9 +135,9 @@ hint: See PEP 668 for the detailed specification.
 
 ```bash
 # 创建虚拟环境
-python3 -m venv flask-env
+python3 -m venv .venv
 # 激活虚拟环境
-source flask-env/bin/activate
+source .venv/bin/activate
 # 在虚拟环境中安装 Flask
 python3 -m pip install Flask
 ```
@@ -146,7 +146,7 @@ python3 -m pip install Flask
 
 ```bash
 # 创建虚拟环境
-python3 -m venv flask-env
+python3 -m venv .venv
 # python3：
 #  这是 Python 3 的命令。
 #  因为一些系统可能同时安装了 Python 2 和 Python 3，
@@ -157,33 +157,33 @@ python3 -m venv flask-env
 # venv：
 #  是 Python 内置的模块，用于创建虚拟环境。
 #  虚拟环境是一个隔离的环境，包含独立的 Python 解释器和包，可以避免项目间的包版本冲突。
-# flask-env：
+# .venv：
 #  这是你要创建的虚拟环境的名称。
 #  你可以根据需要更改这个名字，例如改为 myenv 等。
 
 # 生成的目录结构：
-# flask-env/
+# .venv/
 # │
-# ├── bin/                  # 包含虚拟环境的可执行文件，包括 Python 解释器和脚本
-# │   ├── activate          # 用于激活虚拟环境的脚本（Linux/macOS）
-# │   ├── python            # Python 解释器的链接
-# │   ├── pip               # 包管理工具的链接
-# │   └── ...               # 其他脚本和可执行文件
+# ├── bin/                   # 包含虚拟环境的可执行文件，包括 Python 解释器和脚本
+# │   ├── activate           # 用于激活虚拟环境的脚本（Linux/macOS）
+# │   ├── python             # Python 解释器的链接
+# │   ├── pip                # 包管理工具的链接
+# │   └── ...                # 其他脚本和可执行文件
 # │
-# ├── include/              # 包含 C 语言头文件，主要用于编译 C 扩展
+# ├── include/               # 包含 C 语言头文件，主要用于编译 C 扩展
 # │
-# ├── lib/                  # 存放 Python 标准库和你安装的第三方库
-# │   └── pythonX.Y/        # 其中 X.Y 是你使用的 Python 版本号（例如 python3.8）
+# ├── lib/                   # 存放 Python 标准库和你安装的第三方库
+# │   └── pythonX.Y/         # 其中 X.Y 是你使用的 Python 版本号（例如 python3.8）
 # │       └── site-packages/ # 存放安装的第三方包
 # │
-# ├── lib64/                # 在某些系统中，这个目录包含与 `lib` 相同的内容
+# ├── lib64/                 # 在某些系统中，这个目录包含与 `lib` 相同的内容
 # │
-# └── pyvenv.cfg            # 配置文件，保存虚拟环境的配置信息（例如 Python 版本）
+# └── pyvenv.cfg             # 配置文件，保存虚拟环境的配置信息（例如 Python 版本）
 
 # bin/ 目录：
 #  包含虚拟环境的可执行文件和脚本，例如：
 #  • activate：激活虚拟环境的脚本。
-#  对于 macOS 和 Linux 系统使用 source flask-env/bin/activate 来激活环境。
+#  对于 macOS 和 Linux 系统使用 source .venv/bin/activate 来激活环境。
 #  • python：指向虚拟环境中的 Python 解释器，
 #  确保你在虚拟环境中运行的程序使用的是虚拟环境中的 Python。
 #  • pip：包管理工具 pip，用于安装和管理包。
@@ -198,18 +198,18 @@ python3 -m venv flask-env
 #  如使用的 Python 版本、虚拟环境的路径等。
 
 # 激活虚拟环境
-source flask-env/bin/activate
+source .venv/bin/activate
 # source：
 #  这是一个 Linux/macOS 的命令，用于执行一个脚本。
 #  这个命令会在当前的 shell 环境中激活虚拟环境。
-# flask-env/bin/activate：
+# .venv/bin/activate：
 #  这是虚拟环境中的 activate 脚本。
-#  它位于 flask-env 目录下的 bin 子目录中，运行它可以激活虚拟环境。
-#  在 Windows 系统中，路径会是 flask-env\Scripts\activate。
+#  它位于 .venv 目录下的 bin 子目录中，运行它可以激活虚拟环境。
+#  在 Windows 系统中，路径会是 .venv\Scripts\activate。
 
 # 当你运行这条命令时，系统会激活虚拟环境，使得后续的 Python 命令都在该虚拟环境中执行。
 # 此时，你的 shell 提示符通常会显示虚拟环境的名字，
-# 比如 (flask-env)，表示当前处于虚拟环境中。
+# 比如 (.venv)，表示当前处于虚拟环境中。
 # 激活虚拟环境后，你安装的包将只作用于该环境，而不会影响全局的 Python 环境。
 
 # 在虚拟环境中安装 Flask
@@ -234,10 +234,10 @@ python3 -m pip install Flask
 
 ```bash
 # 1. 创建虚拟环境
-% python3 -m venv flask-env
-# 使用 python3 -m venv flask-env 创建了一个名为 flask-env 的虚拟环境。
+% python3 -m venv .venv
+# 使用 python3 -m venv .venv 创建了一个名为 .venv 的虚拟环境。
 # 2. 激活虚拟环境
-% source flask-env/bin/activate
+% source .venv/bin/activate
 # 激活了这个虚拟环境。
 # 激活后，所有的 Python 命令都将在这个环境中运行，而不会影响全局的 Python 环境。
 # 3. 安装 Flask
@@ -303,8 +303,6 @@ python3 app.py
 ```
 
 ### 2.3. 访问服务器
-
-访问 http://localhost:5001 来上传文件和下载文件。
 
 ```bash
 % python app.py
