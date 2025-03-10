@@ -1,66 +1,81 @@
-# render_template: 用于渲染 HTML 模板，返回一个完整的页面。
-# request: 用于获取请求数据，包括文件、表单数据等。
-# redirect: 用于重定向到指定的路由。
-# url_for: 用于动态生成 URL，通常与 redirect 配合使用。
-from flask import render_template, request, redirect, url_for
-# 从 file_operations 模块中导入文件操作相关的函数
-from file_operations import save_file, get_files, download_file, get_file_size, \
-    delete_file
+from flask import render_template, request, redirect, url_for, flash
+from flask import Response as FlaskResponse
+from werkzeug.wrappers import Response as WerkzeugResponse
+from file_operations import (
+    save_file,
+    get_files,
+    download_file,
+    get_file_size,
+    delete_file,
+)
 
 
-# 该函数用于处理文件上传和展示文件列表的逻辑。
-def upload_page():
-    """
-    处理文件上传请求并展示文件列表页面。
+ALLOWED_EXTENSIONS = {
+    "txt",
+    "pdf",
+    "doc",
+    "docx",
+    "xls",
+    "xlsx",
+    "ppt",
+    "pptx",
+    "png",
+    "jpg",
+    "jpeg",
+    "gif",
+    "mp4",
+    "mov",
+    "avi",
+}  # 允许上传的文件类型
 
-    当用户上传文件时，函数将保存文件并重定向回首页。
-    如果是 GET 请求，函数将返回显示上传页面和文件列表。
 
-    :return: 渲染上传页面（index.html），显示当前上传的文件列表
-    :rtype: flask.Response
-    """
-    if request.method == 'POST':  # 如果是 POST 请求，表示用户提交了上传文件
-        file = request.files['file']  # 从请求中获取上传的文件，'file' 是表单中文件字段的名称
-        save_file(file)  # 调用 save_file 函数将文件保存到服务器
-        return redirect(url_for('home'))  # 上传完成后，重定向到首页，即刷新文件列表页面
+def allowed_file(filename: str) -> bool:
+    """检查文件类型是否符合允许的格式"""
+    # 检查文件名是否包含点："." in filename
+    # 提取文件扩展名并转换为小写：filename.rsplit(".", 1)[1].lower()
+    # 检查扩展名是否在允许的文件类型列表中：filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def upload_page() -> WerkzeugResponse | str:
+    """处理文件上传请求并展示文件列表页面"""
+    # 如果是 POST 请求，表示用户提交了上传文件
+    if request.method == "POST":
+        # 从请求中获取上传的文件
+        # 在 files 中，每个 key 对应 <input type="file" name=""> 里的 name 属性
+        # 每个 value 是一个 Werkzeug 的 FileStorage 对象
+        file = request.files["file"]
+
+        if file and allowed_file(file.filename):
+            filename, error_type = save_file(file)  # 保存文件
+
+            if error_type == "exists":  # 文件已存在
+                flash(f"'{file.filename}' 文件已存在！")  # 提示文件已存在
+            elif error_type == "no_file":  # 没有上传文件
+                flash("没有选择文件，请选择一个文件上传。")  # 提示用户没有选择文件
+            else:
+                flash(f"'{filename}' 文件上传成功!")  # 文件上传成功提示
+
+            return redirect(url_for("home"))
+        else:
+            flash("文件类型无效。请上传有效的文件。")
+            return redirect(url_for("home"))
 
     # 如果是 GET 请求，则显示上传页面和文件列表
-    files = get_files()  # 获取当前所有文件列表
-    return render_template('index.html', files=files, get_file_size=get_file_size)  # 渲染 index.html 模板，并传递文件列表等
+    files = get_files()
+    # 渲染 index.html 模板，并传递文件列表等
+    return render_template("index.html", files=files, get_file_size=get_file_size)
 
 
-# 该函数用于处理文件下载。当用户点击下载链接时，调用 download_file 函数并传入文件名，返回文件下载的响应。
-def download_page(filename):
-    """
-    文件下载
-
-    提供文件下载的网页接口。
-    该函数通过调用 `download_file` 函数，返回指定文件的下载响应。
-
-    :param filename: 要下载的文件名
-    :type filename: str
-    :return: 文件下载的响应
-    :rtype: flask.Response
-    """
+def download_page(filename: str) -> FlaskResponse:
+    """提供文件下载的网页接口"""
     return download_file(filename)
 
 
-def delete_page(filename):
-    """
-    删除文件
-
-    删除指定文件的网页接口。
-    该函数通过调用 `delete_file` 函数删除指定的文件。
-    如果删除成功，重定向到首页；如果删除失败，返回错误信息和 400 状态码。
-
-    :param filename: 要删除的文件名
-    :type filename: str
-    :return: 如果删除成功，返回重定向到首页的响应；如果删除失败，返回带有错误信息的响应。
-    :rtype: flask.Response
-    """
-    # 调用 delete_file 函数删除文件
-    success = delete_file(filename)
-    if success:
-        return redirect(url_for('home'))  # 删除成功后重定向到首页
+def delete_page(filename: str) -> WerkzeugResponse:
+    """删除指定文件的网页接口"""
+    if delete_file(filename):
+        flash(f"文件 '{filename}' 已成功删除！")
     else:
-        return f"Failed to delete file: {filename}", 400  # 如果删除失败，返回错误信息
+        flash(f"文件 '{filename}' 删除失败。")
+    return redirect(url_for("home"))

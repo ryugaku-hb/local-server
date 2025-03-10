@@ -2,7 +2,22 @@
 
 简单的本地服务器
 
-## 1. 文件结构
+## 1. 极速上手
+
+```bash
+# 首次使用
+python3 -m venv venv  # 创建虚拟环境
+source venv/bin/activate  # 激活虚拟环境（Linux/Mac）
+python3 -m pip install Flask  # 在虚拟环境中安装 Flask
+
+# 再次使用
+source venv/bin/activate  # 激活已存在的虚拟环境
+
+# 启动服务器
+python3 app.py
+```
+
+## 2. 文件结构
 
 ```bash
 local-server/
@@ -30,9 +45,9 @@ local-server/
 └── README.md
 ```
 
-## 2. 运行
+## 3. 运行
 
-### 2.1. 安装 Flask
+### 3.1. 安装 Flask
 
 ```bash
 pip install Flask
@@ -44,13 +59,18 @@ pip3 install Flask
 python3 -m venv .venv         # 创建虚拟环境
 source .venv/bin/activate     # 激活虚拟环境
 python3 -m pip install Flask  # 在虚拟环境中安装 Flask
+
+# .venv 作为虚拟环境目录不方便，可以选择其他更直观的目录名
+python3 -m venv env  # 例如 venv、env 或者其他你习惯的名字
+source env/bin/activate
+python3 -m pip install Flask
 ```
 
 ---
 
-<p><details><summary>【✦ ✧ ✩ ❌ Error ⚠️ ✩ ✧ ✦】</summary><p>
+<p><details><summary>【✦ ✧ ✩ ❌ <b>Error</b> ⚠️ ✩ ✧ ✦】</summary><p>
 
-#### 2.1.1. 安装报错
+#### 3.1.1. 安装报错
 
 使用 Homebrew 安装 Flask 时发生了以下错误。
 
@@ -127,7 +147,8 @@ hint: See PEP 668 for the detailed specification.
 # 提示：查看 PEP 668 以了解详细规范。
 ```
 
-#### 2.1.2. 创建虚拟环境
+
+#### 3.1.2. 创建虚拟环境
 
 如果你的系统环境有一些限制，或者你不希望影响全局 Python 安装，可以考虑创建一个虚拟环境。
 
@@ -294,7 +315,7 @@ Successfully installed Flask-3.1.0 Jinja2-3.1.5 MarkupSafe-3.0.2 Werkzeug-3.1.3 
 
 ---
 
-### 2.2. 启动服务器
+### 3.2. 启动服务器
 
 ```bash
 python app.py
@@ -302,7 +323,7 @@ python app.py
 python3 app.py
 ```
 
-### 2.3. 访问服务器
+### 3.3. 访问服务器
 
 ```bash
 % python app.py

@@ -1,0 +1,25 @@
+/* 设置 flash 消息浮动在页面顶部 */
+#flash-message {
+  position: fixed;
+  top: 10px; /* 距离页面顶部的距离 */
+  left: 50%;
+  transform: translateX(-50%); /* 居中对齐 */
+  z-index: 1050; /* 确保它在页面其他内容之上 */
+  width: auto;
+  max-width: 100%;
+  opacity: 0.8; /* 初始透明度稍微低于 1 */
+  transition: opacity 0.5s ease-out; /* 使其平滑消失 */
+}
+
+/* 清除可能存在的小圆点或列表样式 */
+#flash-message ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* 可选：使 flash 消息消失时的效果更加流畅 */
+.alert.fade {
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
