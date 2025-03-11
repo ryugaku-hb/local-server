@@ -1,13 +1,9 @@
 <!DOCTYPE html>
-<!-- 声明文档类型为 HTML5 -->
 <html lang="zh">
-  <!-- 定义页面语言为英语 -->
   <head>
-    <!-- 设置字符编码为 UTF-8，支持多语言字符集 -->
     <meta charset="UTF-8" />
     <!-- 设置视口，确保页面在移动设备上正确显示 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- 页面标题，显示在浏览器标签页上 -->
     <title>本地文件服务器 Local File Server</title>
     <!-- 引入 Bootstrap CSS -->
     <link
@@ -76,8 +72,7 @@
             <!-- 文件名 -->
             <a
               href="{{ url_for('download', filename=filename) }}"
-              class="text-truncate"
-              style="max-width: 60%"
+              class="text-truncate file-name"
               >{{ filename }}</a
             >
 
@@ -90,7 +85,7 @@
           <!-- 删除按钮 -->
           <form
             method="POST"
-            action="{{ url_for('delete_file', filename=filename) }}"
+            action="{{ url_for('delete', filename=filename) }}"
             style="display: inline"
           >
             <button

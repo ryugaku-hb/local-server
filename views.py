@@ -2,39 +2,13 @@ from flask import render_template, request, redirect, url_for, flash
 from flask import Response as FlaskResponse
 from werkzeug.wrappers import Response as WerkzeugResponse
 from file_operations import (
+    allowed_file,
     save_file,
     get_files,
     download_file,
     get_file_size,
     delete_file,
 )
-
-
-ALLOWED_EXTENSIONS = {
-    "txt",
-    "pdf",
-    "doc",
-    "docx",
-    "xls",
-    "xlsx",
-    "ppt",
-    "pptx",
-    "png",
-    "jpg",
-    "jpeg",
-    "gif",
-    "mp4",
-    "mov",
-    "avi",
-}  # 允许上传的文件类型
-
-
-def allowed_file(filename: str) -> bool:
-    """检查文件类型是否符合允许的格式"""
-    # 检查文件名是否包含点："." in filename
-    # 提取文件扩展名并转换为小写：filename.rsplit(".", 1)[1].lower()
-    # 检查扩展名是否在允许的文件类型列表中：filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def upload_page() -> WerkzeugResponse | str:
@@ -50,11 +24,11 @@ def upload_page() -> WerkzeugResponse | str:
             filename, error_type = save_file(file)  # 保存文件
 
             if error_type == "exists":  # 文件已存在
-                flash(f"'{file.filename}' 文件已存在！")  # 提示文件已存在
+                flash(f"文件 {file.filename} 已存在！")  # 提示文件已存在
             elif error_type == "no_file":  # 没有上传文件
                 flash("没有选择文件，请选择一个文件上传。")  # 提示用户没有选择文件
             else:
-                flash(f"'{filename}' 文件上传成功!")  # 文件上传成功提示
+                flash(f"文件 {filename} 上传成功!")  # 文件上传成功提示
 
             return redirect(url_for("home"))
         else:
@@ -75,7 +49,7 @@ def download_page(filename: str) -> FlaskResponse:
 def delete_page(filename: str) -> WerkzeugResponse:
     """删除指定文件的网页接口"""
     if delete_file(filename):
-        flash(f"文件 '{filename}' 已成功删除！")
+        flash(f"文件 {filename} 已成功删除！")
     else:
-        flash(f"文件 '{filename}' 删除失败。")
+        flash(f"文件 {filename} 删除失败。")
     return redirect(url_for("home"))

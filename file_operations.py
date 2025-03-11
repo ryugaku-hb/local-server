@@ -1,9 +1,17 @@
 import os
-from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
+from werkzeug.datastructures import FileStorage
 from flask import send_from_directory, abort, Response
-from config import UPLOAD_FOLDER
 from typing import Tuple, Union
+from config import UPLOAD_FOLDER, ALLOWED_EXTENSIONS
+
+
+def allowed_file(filename: str) -> bool:
+    """检查文件类型是否符合允许的格式"""
+    # 检查文件名是否包含点："." in filename
+    # 提取文件扩展名并转换为小写：filename.rsplit(".", 1)[1].lower()
+    # 检查扩展名是否在允许的文件类型列表中：filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def is_file_exists(filename: str) -> bool:
