@@ -1,109 +1,16 @@
-<!DOCTYPE html>
-<html lang="zh">
-  <head>
-    <meta charset="UTF-8" />
-    <!-- 设置视口，确保页面在移动设备上正确显示 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>本地文件服务器 Local File Server</title>
-    <!-- 引入 Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <!-- 引入外部的 CSS 样式文件 -->
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/styles.css') }}"
-    />
-  </head>
-  <body>
-    <div class="container my-5">
-      <!-- 显示 flash 消息 -->
-      {% with messages = get_flashed_messages() %} {% if messages %}
-      <div
-        id="flash-message"
-        class="alert alert-info alert-dismissible fade show"
-        role="alert"
-      >
-        <ul class="mb-0">
-          {% for message in messages %}
-          <li>{{ message }}</li>
-          {% endfor %}
-        </ul>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-      {% endif %} {% endwith %}
-
-      <!-- 主标题 -->
-      <h1 class="display-4 text-center mb-4">上传和下载文件</h1>
-
-      <!-- 子标题 -->
-      <h2 class="mt-5">上传文件</h2>
-
-      <!-- 文件上传表单 -->
-      <form method="POST" enctype="multipart/form-data" class="list-group mt-3">
-        <div class="input-group mb-3">
-          <input
-            type="file"
-            name="file"
-            class="form-control"
-            id="fileInput"
-            required
-          />
-          <button type="submit" class="btn btn-outline-secondary">上传</button>
-        </div>
-      </form>
-
-      <!-- 子标题 -->
-      <h2 class="mt-5">可供下载的文件</h2>
-
-      <ul class="list-group mt-3">
-        {% for filename in files %}
-        <li
-          class="list-group-item d-flex justify-content-between align-items-center"
-        >
-          <!-- 文件信息和删除按钮的容器 -->
-          <div class="d-flex w-75 justify-content-between align-items-center">
-            <!-- 文件名 -->
-            <a
-              href="{{ url_for('download', filename=filename) }}"
-              class="text-truncate file-name"
-              >{{ filename }}</a
-            >
-
-            <!-- 文件大小 -->
-            <div class="file-info text-muted ms-3" style="white-space: nowrap">
-              <span class="file-size">{{ get_file_size(filename) }}</span>
-            </div>
-          </div>
-
-          <!-- 删除按钮 -->
-          <form
-            method="POST"
-            action="{{ url_for('delete', filename=filename) }}"
-            style="display: inline"
-          >
-            <button
-              type="submit"
-              onclick="return confirm('确定要删除此文件吗？')"
-              class="btn btn-danger btn-sm"
-            >
-              删除
-            </button>
-          </form>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <!-- 引入 Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- 引入新的 JavaScript 文件 -->
-    <script src="{{ url_for('static', filename='js/flash_messages.js') }}"></script>
-  </body>
-</html>
+{% extends "base.html" %}
+<!-- 继承 base.html 模板，当前模板将会继承 base.html 中定义的结构 -->
+{% block title %}本地文件服务器 Local File Server{% endblock %}
+<!-- 重写 base.html 中的 title 块，设置页面的标题为 "本地文件服务器" -->
+{% block content %}
+  <!-- 开始重写 base.html 中的 content 块，填充当前页面的具体内容 -->
+  {% include "./partials/_flash_messages.html" %}
+  <!-- 包含文件 ./partials/_flash_messages.html 的内容，用来显示提示消息（如操作成功或失败） -->
+  <!-- 主标题 -->
+  <h1 class="display-4 text-center mb-4">上传和下载文件</h1>
+  {% include "./partials/_upload_form.html" %}
+  <!-- 包含文件 ./partials/_upload_form.html 的内容，用于显示上传文件的表单 -->
+  {% include "./partials/_file_list.html" %}
+  <!-- 包含文件 ./partials/_file_list.html 的内容，通常用于显示可下载的文件列表 -->
+  {% endblock %}
+  <!-- 结束 content 块 -->

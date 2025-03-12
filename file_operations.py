@@ -1,4 +1,4 @@
-import os
+import os, time
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import FileStorage
 from flask import send_from_directory, abort, Response
@@ -75,3 +75,4 @@ def delete_file(filename: str) -> bool:
         return False  # 文件不存在，返回 False
     except Exception as e:
         return False  # 遇到异常，返回 False
+
