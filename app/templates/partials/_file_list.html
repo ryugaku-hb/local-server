@@ -1,0 +1,73 @@
+<h2 class="mt-5">可供下载的文件</h2>
+<ul class="list-group mt-4 shadow-sm">
+    {% for filename in files %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="d-flex w-75 justify-content-between align-items-center">
+                <a href="{{ url_for('download', filename=filename) }}"
+                   class="text-truncate file-name">{{ filename }}</a>
+                <div class="file-info text-muted ms-3">
+                    <span class="file-size">{{ get_file_size(filename) }}</span>
+                </div>
+            </div>
+            <form method="post" action="{{ url_for('delete', filename=filename) }}">
+                <button type="submit"
+                        onclick="return confirm('确定要删除此文件吗？')"
+                        class="btn btn-danger btn-sm">删除</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+<table class="table table-hover table-bordered shadow-sm mt-4">
+    <thead class="table-light">
+        <tr>
+            <th>文件名</th>
+            <th>大小</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for filename in files %}
+            <tr>
+                <td class="text-truncate">
+                    <a href="{{ url_for('download', filename=filename) }}">
+                        <i class="bi bi-file-earmark"></i> {{ filename }}
+                    </a>
+                </td>
+                <td class="text-muted">{{ get_file_size(filename) }}</td>
+                <td>
+                    <form method="post" action="{{ url_for('delete', filename=filename) }}">
+                        <button type="submit"
+                                onclick="return confirm('确定要删除此文件吗？')"
+                                class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> 删除
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mt-4">
+    {% for filename in files %}
+        <div class="col">
+            <div class="card shadow-sm">
+                <div class="card-body d-flex justify-content-between align-items-center">
+                    <a href="{{ url_for('download', filename=filename) }}"
+                       class="text-truncate">
+                        <i class="bi bi-file-earmark-text"></i> {{ filename }}
+                    </a>
+                    <span class="text-muted">{{ get_file_size(filename) }}</span>
+                </div>
+                <div class="card-footer text-end">
+                    <form method="post" action="{{ url_for('delete', filename=filename) }}">
+                        <button type="submit"
+                                onclick="return confirm('确定要删除此文件吗？')"
+                                class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> 删除
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

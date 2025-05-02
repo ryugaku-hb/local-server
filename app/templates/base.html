@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="本地文件服务器，提供简单的文件上传和下载功能" />
+    <meta name="keywords" content="本地文件服务器, 文件上传, 文件下载, Python, 网络服务器" />
+    <title>
+      {% block title %}本地文件服务器{% endblock %}
+    </title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/styles.css') }}" />
+  </head>
+  <body>
+    <div class="container my-5">
+      {% block content %}{% endblock %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/flash_messages.js') }}"></script>
+  </body>
+</html>

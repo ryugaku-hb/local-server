@@ -1,9 +1,6 @@
-import os, time
-from werkzeug.utils import secure_filename
-from werkzeug.datastructures import FileStorage
-from flask import send_from_directory, abort, Response
-from typing import Tuple, Union
-from config import UPLOAD_FOLDER, ALLOWED_EXTENSIONS
+import os
+from flask import send_from_directory, abort
+from .config import Config
 
 
 def allowed_file(filename: str) -> bool:
@@ -11,46 +8,58 @@ def allowed_file(filename: str) -> bool:
     # 检查文件名是否包含点："." in filename
     # 提取文件扩展名并转换为小写：filename.rsplit(".", 1)[1].lower()
     # 检查扩展名是否在允许的文件类型列表中：filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+    return (
+        "." in filename
+        and filename.rsplit(".", 1)[1].lower() in Config.ALLOWED_EXTENSIONS
+    )
+
+
+def ensure_upload_folder_exists():
+    """确保上传文件夹存在，不存在则创建"""
+    os.makedirs(Config.UPLOAD_FOLDER, exist_ok=True)
 
 
 def is_file_exists(filename: str) -> bool:
     """检查文件是否已经存在"""
-    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    file_path = os.path.join(Config.UPLOAD_FOLDER, filename)
     return os.path.exists(file_path)
 
 
-def save_file(file: FileStorage) -> Tuple[Union[None, str], Union[str, None]]:
+def save_file(file):
     """保存上传的文件"""
-    if file:  # 如果文件对象存在（即用户上传了文件）
-        filename = secure_filename(file.filename)  # 处理文件名
-        file_path = os.path.join(UPLOAD_FOLDER, filename)  # 构造文件保存路径
 
-        if is_file_exists(filename):
-            return None, "exists"  # 文件已存在，返回 None 和错误类型 "exists"
+    # 处理文件名
+    # filename = secure_filename(file.filename)
+    filename = file.filename
+    # 构造文件保存路径
+    file_path = os.path.join(Config.UPLOAD_FOLDER, filename)
 
-        file.save(file_path)  # 将文件保存到指定路径
-        return filename, None  # 文件保存成功，返回文件名和 None
+    if is_file_exists(filename):
+        return {"success": False, "error": "exists", "filename": filename}
 
-    return None, "no_file"  # 没有上传文件，返回 None 和错误类型 "no_file"
+    # 将文件保存到指定路径
+    file.save(file_path)
+    return {"success": True, "filename": filename}
 
 
 def get_files() -> list[str]:
     """返回上传的文件列表，过滤掉隐藏文件"""
-    return [f for f in os.listdir(UPLOAD_FOLDER) if not f.startswith(".")]
+    return [f for f in os.listdir(Config.UPLOAD_FOLDER) if not f.startswith(".")]
 
 
-def download_file(filename: str) -> Response:
+def download_file(filename: str):
     """提供文件下载"""
-    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    file_path = os.path.join(Config.UPLOAD_FOLDER, filename)
+    print()
+    print(f"正在下载{file_path}, {Config.UPLOAD_FOLDER}")
     if not os.path.exists(file_path):
         abort(404, description=f"File '{filename}' not found")  # 返回 404 错误
-    return send_from_directory(UPLOAD_FOLDER, filename)  # 从指定目录中发送文件
+    return send_from_directory(Config.UPLOAD_FOLDER, filename)  # 从指定目录中发送文件
 
 
 def get_file_size(filename: str) -> str:
     """获取文件大小"""
-    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    file_path = os.path.join(Config.UPLOAD_FOLDER, filename)
     if not os.path.exists(file_path):
         return "File not found"
 
@@ -67,7 +76,7 @@ def get_file_size(filename: str) -> str:
 
 def delete_file(filename: str) -> bool:
     """删除文件"""
-    file_path = os.path.join(UPLOAD_FOLDER, filename)
+    file_path = os.path.join(Config.UPLOAD_FOLDER, filename)
     try:
         if os.path.exists(file_path):
             os.remove(file_path)  # 删除文件
@@ -75,4 +84,3 @@ def delete_file(filename: str) -> bool:
         return False  # 文件不存在，返回 False
     except Exception as e:
         return False  # 遇到异常，返回 False
-
