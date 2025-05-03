@@ -14,10 +14,12 @@ __all__ = ["Config", "RuntimeState", "get_runtime_config"]
 
 # 配置上传目录 (默认: uploads)
 UPLOAD_FOLDER = os.getenv("FLASK_UPLOAD_FOLDER", "uploads")  # 上传目录 uploads
+
 # 配置最大上传文件大小
 MAX_CONTENT_LENGTH = int(
     os.getenv("FLASK_MAX_CONTENT_LENGTH", 100 * 1024 * 1024)
 )  # 100 MB
+
 # 允许上传的文件扩展名 (白名单)
 ALLOWED_EXTENSIONS = {
     "txt",

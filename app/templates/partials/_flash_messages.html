@@ -4,9 +4,7 @@
          class="alert alert-info alert-dismissible fade show"
          role="alert">
       <ul class="mb-0">
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
+        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
       </ul>
       <button type="button"
               class="btn-close"

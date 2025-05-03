@@ -1,6 +1,6 @@
 from flask import Flask
 from .config import RuntimeConfig
-from .routes import register_routes
+from .routes import bp
 
 
 def create_app(runtime_config: RuntimeConfig):
@@ -10,6 +10,7 @@ def create_app(runtime_config: RuntimeConfig):
     # 加载配置类中的属性 (包括 SECRET_KEY)
     app.config.from_object(runtime_config.config)
 
-    register_routes(app)
+    # register_routes(app)
+    app.register_blueprint(bp)
 
     return app

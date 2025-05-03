@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, Response
 from .file_operations import (
     allowed_file,
     save_file,
@@ -8,20 +8,20 @@ from .file_operations import (
     delete_file,
     ensure_upload_folder_exists,
 )
+from werkzeug.wrappers import Response as BaseResponse
 
 
-def home_page():
+def home_page() -> str:
 
     # 调用 ensure_upload_folder_exists 来确保上传文件夹存在
     ensure_upload_folder_exists()
-
     # 获取文件列表
     files = get_files()
     # 渲染模板返回页面
     return render_template("index.html", files=files, get_file_size=get_file_size)
 
 
-def upload_handler():
+def upload_handler() -> BaseResponse:
     # --- request.files 说明 ---
     """
     Flask 中 request.files 是处理文件上传的核心:
@@ -61,29 +61,32 @@ def upload_handler():
         # 保存文件
         result = save_file(file)
 
-        if not result["success"]:
-            if result["error"] == "exists":
-                flash(f"⚠️ 文件 {result['filename']} 已存在！")
+        if not result.success:
+            if result.error == "exists":
+                flash(f"⚠️ 文件 {result.filename} 已存在！")
         else:
-            flash(f"✅ 文件 {result['filename']} 上传成功!")
+            flash(f"✅ 文件 {result.filename} 上传成功!")
 
-        return redirect(url_for("home"))
+        return redirect(url_for("main.home"))
     else:
         flash("文件类型无效。请上传有效的文件。")
-        return redirect(url_for("home"))
+        return redirect(url_for("main.home"))
 
 
-def download_handler(filename: str):
+def download_handler(filename: str) -> Response:
     """处理文件下载逻辑"""
 
     return download_file(filename)
 
 
-def delete_handler(filename: str):
+def delete_handler(filename: str) -> BaseResponse:
     """处理文件删除逻辑"""
 
-    if delete_file(filename):
-        flash(f"文件 {filename} 已成功删除！")
+    result = delete_file(filename)
+
+    if result.success:
+        flash(f"✅ 文件 {result.filename} 已成功删除！")
     else:
-        flash(f"文件 {filename} 删除失败。")
-    return redirect(url_for("home"))
+        flash(f"❌ 文件 {result.filename} 删除失败！错误信息：{result.error}")
+
+    return redirect(url_for("main.home"))
