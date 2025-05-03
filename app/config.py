@@ -1,7 +1,6 @@
 import os
 from typing import Type
 from dataclasses import dataclass
-from .utils import get_debug_mode, get_port
 
 
 # 限定模块对外暴露的公有接口
@@ -59,63 +58,40 @@ class Config:
     PORT = PORT
 
 
-class DevelopmentConfig(Config):
-    """开发环境配置"""
+def get_port(default_port: int) -> int:
+    """提示用户输入端口号，验证输入是否为有效的整数且在 1024~65535 范围内。
+    若用户直接回车或输入非法，将返回默认端口。
 
-    DEBUG = True  # 调试模式
-    ENV = "development"  # 运行环境  (开发/生产)
-
-
-class ProductionConfig(Config):
-    """生产环境配置"""
-
-    DEBUG = False
-    ENV = "production"
-
-
-@dataclass
-class RuntimeConfig:
-    config: Type[Config]  # 配置类 (如 DevelopmentConfig 或 ProductionConfig)
-    debug: bool  # 是否启用调试模式
-    port: int  # 启动 Flask 应用的端口号
-
-    def is_dev(self) -> bool:
-        return self.config.EMV == "development"
-
-    def is_prod(self) -> bool:
-        return self.config.EMV == "production"
-
-    def __repr__(self):
-        return (
-            f"<RuntimeState env={self.config.EMV} debug={self.debug} port={self.port}>"
-        )
-
-
-# ===== 运行时配置获取与环境变量设置相关函数 =====
-
-
-def _set_env_variables(config: Type[Config], port: int, debug: bool):
-    """设置环境变量供子进程读取"""
-    os.environ["FLASK_PORT"] = str(port)
-    os.environ["FLASK_DEBUG"] = str(debug)
-    os.environ["FLASK_ENV"] = config.ENV
-
-
-def _get_env_variables() -> RuntimeConfig:
-    """从环境变量中获取配置"""
-    port = int(os.getenv("FLASK_PORT", str(Config.PORT)))
-    debug = os.getenv("FLASK_DEBUG", str(DevelopmentConfig.DEBUG)) == "True"
-    selected_config = DevelopmentConfig if debug else ProductionConfig
-
-    return RuntimeConfig(selected_config, debug, port)
-
-
-def get_runtime_config() -> RuntimeConfig:
-    """获取运行时的配置，包括配置类、调试模式和端口号。
+    Args:
+        default_port (int): 默认端口号，当用户不输入或输入无效时使用
 
     Returns:
-        RuntimeConfig: 封装的配置对象。
+        int: 最终使用的端口号
     """
+
+    prompt = f"请输入端口号（1024-65535，回车使用默认 {default_port}）："
+
+    while True:
+        user_input = input(prompt).strip()
+
+        if not user_input:
+            print(f"✅ 使用默认端口：{default_port}。")
+            return default_port
+
+        if user_input.isdigit():
+            port = int(user_input)
+
+            if 1024 <= port <= 65535:
+                print(f"✅ 使用端口：{port}。")
+                return port
+            else:
+                print("❌ 端口号必须在 1024 到 65535 之间。")
+        else:
+            print("❌ 输入无效，请输入一个数字。")
+
+
+def get_runtime_config():
+    """获取运行时的配置，包括配置类和端口号。"""
 
     # --- WERKZEUG_RUN_MAIN 说明 ---
     """
@@ -141,33 +117,19 @@ def get_runtime_config() -> RuntimeConfig:
     if os.getenv("WERKZEUG_RUN_MAIN") != "true":  # 只在主进程中执行一次
         # 主进程: 提示用户输入端口号和是否启用调试模式，并存入环境变量
         port = get_port(default_port=Config.PORT)
-        debug = get_debug_mode(default_debug=DevelopmentConfig.DEBUG)
-
-        # 根据 debug 决定用哪个配置类
-        selected_config = DevelopmentConfig if debug else ProductionConfig
 
         # 写入环境变量供子进程读取
-        _set_env_variables(selected_config, port, debug)
+        os.environ["FLASK_PORT"] = str(port)
 
-        return RuntimeConfig(selected_config, debug, port)
+        return (
+            Config,
+            port,
+        )
     else:
         # 子进程: 从主进程传来的环境变量中读取端口号和调试标志
-        return _get_env_variables()
+        port = int(os.getenv("FLASK_PORT", str(Config.PORT)))
 
-
-class RuntimeState:
-    """表示当前运行时的配置信息"""
-
-    def __init__(self, config: Type[Config], debug: bool, port: int):
-        self.config = config
-        self.debug = debug
-        self.port = port
-
-    def is_dev(self) -> bool:
-        return self.config.env == "development"
-
-    def is_prod(self) -> bool:
-        return self.env == "production"
-
-    def __repr__(self):
-        return f"<RuntimeState env={self.env} debug={self.debug} port={self.port}>"
+        return (
+            Config,
+            port,
+        )

@@ -1,17 +1,10 @@
 from flask import render_template, request, redirect, url_for, flash, Response
-from .file_operations import (
-    allowed_file,
-    save_file,
-    get_files,
-    download_file,
-    get_file_size,
-    delete_file,
-    ensure_upload_folder_exists,
-)
+from .file_operations import save_file, download_file, delete_file
+from .utils import ensure_upload_folder_exists, get_file_size, allowed_file, get_files
 from werkzeug.wrappers import Response as BaseResponse
 
 
-def home_page() -> str:
+def index_page() -> str:
 
     # 调用 ensure_upload_folder_exists 来确保上传文件夹存在
     ensure_upload_folder_exists()
@@ -67,10 +60,10 @@ def upload_handler() -> BaseResponse:
         else:
             flash(f"✅ 文件 {result.filename} 上传成功!")
 
-        return redirect(url_for("main.home"))
+        return redirect(url_for("file.index"))
     else:
         flash("文件类型无效。请上传有效的文件。")
-        return redirect(url_for("main.home"))
+        return redirect(url_for("file.index"))
 
 
 def download_handler(filename: str) -> Response:
@@ -89,4 +82,4 @@ def delete_handler(filename: str) -> BaseResponse:
     else:
         flash(f"❌ 文件 {result.filename} 删除失败！错误信息：{result.error}")
 
-    return redirect(url_for("main.home"))
+    return redirect(url_for("file.index"))
