@@ -1,0 +1,31 @@
+{# 帖子列表容器 #}
+<div class="post-list" id="post-list-container">
+    {% for post in posts %}
+        {# 使用 Bootstrap 卡片样式，美观统一，每个帖子一个卡片 #}
+        <div class="card shadow-sm mb-4 border-0">
+            <div class="card-body">
+                {# 标题和删除按钮同一行，左右分布 #}
+                <div class="d-flex justify-content-between align-items-start">
+                    <h5 class="card-title fw-bold mb-2">{{ post.title }}</h5>
+                    <form action="{{ url_for('bbs.delete_post', post_index=loop.index0) }}"
+                          method="post"
+                          class="delete-form ms-3">
+                        <button type="submit"
+                                class="btn btn-sm btn-outline-danger"
+                                aria-label="删除此帖子">
+                            <i class="bi bi-trash3"></i> 删除
+                        </button>
+                    </form>
+                </div>
+                {# 内容正文，使用卡片正文文本样式 #}
+                <p class="card-text text-body">{{ post.content }}</p>
+                {# 额外信息如作者、IP、时间，使用更淡的颜色和小字体 #}
+                <p class="text-muted small mt-3 mb-0">
+                    <i class="bi bi-person"></i> 作者：{{ post.author or '匿名用户' }} &nbsp;|&nbsp;
+                    <i class="bi bi-globe2"></i> IP：{{ post.ip }} &nbsp;|&nbsp;
+                    <i class="bi bi-clock"></i> 时间：{{ post.timestamp }}
+                </p>
+            </div>
+        </div>
+    {% endfor %}
+</div>

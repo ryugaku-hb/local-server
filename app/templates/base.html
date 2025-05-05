@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html lang="zh">
   <head>
+    {# 设置字符编码为 UTF-8，以支持多语言字符  #}
     <meta charset="UTF-8" />
+    {# 设置视口，确保页面在不同设备上自适应布局 #}
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {# 提供页面的简短描述，有助于 SEO #}
     <meta name="description" content="本地文件服务器，提供简单的文件上传和下载功能" />
+    {# 提供相关的关键词，有助于 SEO（尽管现代搜索引擎不太依赖此标签） #}
     <meta name="keywords" content="本地文件服务器, 文件上传, 文件下载, Python, 网络服务器" />
+    {# 页面标题块，子模板可以覆盖 #}
+    {# 使用 Flask 的模板块，提供一个可替换的标题，默认为“本地文件服务器” #}
     <title>
-      {% block title %}本地文件服务器{% endblock %}
+      {% block title %}
+        本地文件服务器
+      {% endblock title %}
     </title>
+    {# 引入 Bootstrap CSS，提供响应式布局和基础样式 #}
     <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/styles.css') }}" />
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" />
+    {% block extra_css %}
+      {# 可在子模板中添加额外 CSS #}
+    {% endblock extra_css %}
   </head>
   <body>
+    {# 创建响应式容器 #}
+    {# 添加上下边距 #}
     <div class="container my-5">
-      {% block content %}{% endblock %}
+      {# 页面内容部分占位符，允许子模板自定义内容 #}
+      {% block content %}
+      {% endblock content %}
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/flash_messages.js') }}"></script>
+    {# 引入 Bootstrap JS，支持 Bootstrap 组件的交互行为 #}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}
+      {# 可在子模板中添加额外 JS #}
+    {% endblock extra_js %}
   </body>
 </html>

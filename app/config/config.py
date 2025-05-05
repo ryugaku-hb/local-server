@@ -1,11 +1,5 @@
 import os
-from typing import Type
-from dataclasses import dataclass
-
-
-# 限定模块对外暴露的公有接口
-# 当使用 `from config import *` 时，仅导入以下名称
-__all__ = ["Config", "RuntimeState", "get_runtime_config"]
+from .port import get_port_from_input
 
 
 # ===== 默认配置 (可通过环境变量覆盖) =====
@@ -36,6 +30,8 @@ ALLOWED_EXTENSIONS = {
     "mp4",
     "mov",
     "avi",
+    'py',
+    'md'
 }
 # 会话密钥 (用于 session 和 flash 的加密)
 # 优先使用环境变量，否则自动生成随机密钥
@@ -58,36 +54,7 @@ class Config:
     PORT = PORT
 
 
-def get_port(default_port: int) -> int:
-    """提示用户输入端口号，验证输入是否为有效的整数且在 1024~65535 范围内。
-    若用户直接回车或输入非法，将返回默认端口。
-
-    Args:
-        default_port (int): 默认端口号，当用户不输入或输入无效时使用
-
-    Returns:
-        int: 最终使用的端口号
-    """
-
-    prompt = f"请输入端口号（1024-65535，回车使用默认 {default_port}）："
-
-    while True:
-        user_input = input(prompt).strip()
-
-        if not user_input:
-            print(f"✅ 使用默认端口：{default_port}。")
-            return default_port
-
-        if user_input.isdigit():
-            port = int(user_input)
-
-            if 1024 <= port <= 65535:
-                print(f"✅ 使用端口：{port}。")
-                return port
-            else:
-                print("❌ 端口号必须在 1024 到 65535 之间。")
-        else:
-            print("❌ 输入无效，请输入一个数字。")
+# ===== 获取运行时配置 =====
 
 
 def get_runtime_config():
@@ -116,7 +83,7 @@ def get_runtime_config():
 
     if os.getenv("WERKZEUG_RUN_MAIN") != "true":  # 只在主进程中执行一次
         # 主进程: 提示用户输入端口号和是否启用调试模式，并存入环境变量
-        port = get_port(default_port=Config.PORT)
+        port = get_port_from_input(default_port=Config.PORT)
 
         # 写入环境变量供子进程读取
         os.environ["FLASK_PORT"] = str(port)

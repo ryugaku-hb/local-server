@@ -1,0 +1,67 @@
+{# 创建居中的行 #}
+{# 使用 Bootstrap 的 `justify-content-center` 类来使内容居中 #}
+<div class="row justify-content-center">
+    {# 创建一个响应式的列，宽度会根据设备不同自动调整，默认大屏显示为 6 列，中屏显示为 8 列 #}
+    <div class="col-lg-6 col-md-8">
+        {# 卡片组件 #}
+        {# 创建一个带阴影效果的卡片组件 #}
+        {# shadow 为卡片添加阴影效果 #}
+        <div class="card shadow">
+            {# 卡片的头部，显示标题  #}
+            <div class="card-header">
+                <h4 class="mb-0">发布新帖子</h4>
+            </div>
+            {# 卡片的主体部分，包含表单内容 #}
+            <div class="card-body">
+                {# 发帖表单 #}
+                {# 提交到 `bbs.new_post` 的路由 #}
+                <form id="post-form" action="{{ url_for('bbs.new_post') }}" method="post">
+                    {# form-group 是一个常见的类，用来包含每个表单输入元素 #}
+                    {# mb-3 表示每个输入框和标签之间有适当的底部间距 #}
+                    <div class="form-group mb-3">
+                        {# 标题输入框 #}
+                        <label for="title" class="form-label">标题</label>
+                        {# required 表示这些字段必须填写 #}
+                        {# placeholder 提供了提示文本 #}
+                        {# autofocus 自动聚焦第一个输入框 #}
+                        <input type="text"
+                               class="form-control"
+                               id="title"
+                               name="title"
+                               placeholder="请输入帖子标题"
+                               required
+                               autofocus>
+                    </div>
+                    <div class="form-group mb-3">
+                        {# 内容输入框，允许用户输入帖子内容 #}
+                        <label for="content" class="form-label">内容</label>
+                        <textarea class="form-control"
+                                  id="content"
+                                  name="content"
+                                  rows="3"
+                                  placeholder="请输入帖子内容"
+                                  required></textarea>
+                    </div>
+                    {# 作者输入框 #}
+                    {# 允许用户填写作者名，如果 session 中存在作者信息则填充 #}
+                    <div class="form-group mb-3" id="author-container">
+                        <!-- 作者输入框 -->
+                        <label for="author" class="form-label">作者（可选）</label>
+                        <input type="text"
+                               class="form-control"
+                               id="author"
+                               name="author"
+                               value="{{ session['author'] if 'author' in session else '' }}">
+                    </div>
+                    {# d-grid 是 Bootstrap 的网格布局工具类 #}
+                    <div class="d-grid">
+                        {# 全宽按钮，提交表单 #}
+                        {# btn btn-primary 用来创建一个主按钮 #}
+                        {# aria-label 为无障碍技术提供按钮的文本描述，增强可访问性 #}
+                        <button type="submit" class="btn btn-primary" aria-label="发布新帖子">发布</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

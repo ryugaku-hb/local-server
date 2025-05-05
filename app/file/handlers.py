@@ -11,7 +11,7 @@ def index_page() -> str:
     # 获取文件列表
     files = get_files()
     # 渲染模板返回页面
-    return render_template("index.html", files=files, get_file_size=get_file_size)
+    return render_template("file/index.html", files=files, get_file_size=get_file_size)
 
 
 def upload_handler() -> BaseResponse:

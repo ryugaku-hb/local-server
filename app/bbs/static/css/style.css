@@ -1,0 +1,63 @@
+/* 帖子卡片样式：设置边框、内边距和轻微阴影 */
+.post-card {
+  transition: box-shadow 0.2s ease-in-out; /* 鼠标悬停时阴影过渡效果 */
+  border: 1px solid #dee2e6; /* 卡片边框颜色 */
+  background-color: #fff; /* 背景为白色 */
+  border-radius: 0.5rem; /* 圆角边框 */
+}
+
+/* 鼠标悬停时加强阴影，使卡片有立体感 */
+.post-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* 添加柔和的阴影效果 */
+}
+
+/* 帖子标题样式：更突出，更清晰 */
+.post-card h5 {
+  color: #343a40; /* 深灰色，避免纯黑造成刺眼 */
+  font-weight: bold; /* 加粗标题 */
+}
+
+/* 帖子正文内容样式 */
+.post-card .text-body {
+  color: #495057; /* 正文颜色稍淡，避免与标题抢眼 */
+  font-size: 1rem; /* 正文标准大小 */
+}
+
+/* 作者、IP 和时间信息的样式 */
+.post-card .text-muted {
+  font-size: 0.85rem; /* 略小的字体，用于次要信息 */
+  color: #6c757d; /* Bootstrap 的 muted 灰色 */
+  margin-top: 1rem;
+}
+
+/* 删除按钮外边距，避免贴得太紧 */
+.delete-form {
+  margin-left: 1rem;
+}
+
+/* 酷炫的 hr 样式 */
+.cool-hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(to right, #ff7e5f, #feb47b); /* 渐变效果 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 添加阴影效果 */
+  margin: 20px 0;
+  position: relative;
+}
+
+.cool-hr::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+/* 给动态插入的帖子增加动画 */
+#post-list-container {
+  transition: opacity 0.3s ease;
+}

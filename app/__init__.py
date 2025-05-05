@@ -18,6 +18,7 @@ def create_app(config: type[Config]) -> Flask:
     # 注册首页跳转
     @app.route("/")
     def home():
-        return redirect(url_for("file.index"))
+        # return redirect(url_for("file.index"))
+        return redirect(url_for("bbs.index"))
 
     return app

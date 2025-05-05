@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}
+    BBS 首页
+{% endblock title %}
+{% block extra_css %}
+    <link rel="stylesheet"
+          href="{{ url_for('bbs.static', filename='css/styles.css') }}" />
+{% endblock extra_css %}
+{% block content %}
+    {# 帖子列表 #}
+    <div id="post-list-container">{% include "bbs/_post_list.html" %}</div>
+    <hr class="cool-hr">
+    {# 发帖表单  #}
+    <div id="new-post-form-container">{% include "bbs/_new_post_form.html" %}</div>
+{% endblock content %}
+{% block extra_js %}
+    <script src="{{ url_for('bbs.static', filename='js/index.js') }}"></script>
+{% endblock extra_js %}

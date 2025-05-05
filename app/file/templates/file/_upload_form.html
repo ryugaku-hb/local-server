@@ -1,0 +1,26 @@
+{# 页面标题，显示上传文件，并为其添加了上边距 #}
+<h2 class="mt-5">上传文件</h2>
+{# 创建表单 #}
+{# method="post": 表单使用 POST 方法提交数据，这是最常用的文件上传方法。 #}
+{# action="/upload": 表单数据会提交到 /upload 路径，
+通常在后端路由中有相应的处理程序来接收和处理这个请求。 #}
+{# enctype="multipart/form-data": 该属性指定表单的数据编码类型。
+对于文件上传，必须使用 multipart/form-data，否则文件将无法正确上传。 #}
+{# `class="list-group"` 用于应用 Bootstrap 的样式，`mt-4` 添加上边距 #}
+<form method="post"
+      action="{{ url_for('file.upload') }}"
+      enctype="multipart/form-data"
+      class="list-group mt-4">
+  <div class="input-group mb-3">
+    {# 文件输入框 #}
+    {# type="file": 该输入框允许用户选择文件。 #}
+    {# name="file": 文件输入框的名称属性，用于在表单提交时，后端根据这个名称来获取文件。 #}
+    {# id="fileInput": 为该元素设置一个唯一的标识符，通常在 JS 中用来引用它，或者与其他元素进行关联。 #}
+    {# required: 此属性确保用户在提交表单之前必须选择一个文件，否则表单不能提交。 #}
+    <input type="file" name="file" class="form-control" id="fileInput" required />
+    {# 提交按钮，点击后提交表单以上传文件 #}
+    {# type="submit": 定义按钮的类型为提交按钮，点击时提交表单。 #}
+    {# 上传: 按钮的文本，表示该按钮的功能。 #}
+    <button type="submit" class="btn btn-outline-secondary">上传</button>
+  </div>
+</form>

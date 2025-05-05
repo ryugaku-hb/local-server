@@ -14,24 +14,35 @@ python3 -m pip install Flask  # 在虚拟环境中安装 Flask
 source venv/bin/activate      # 激活已存在的虚拟环境
 
 # 启动服务器
-python3 app.py
+python3 run.py
 ```
 
 ## 2. 文件结构
 
 ```python
 local-server/
-├── app.py  # 应用启动入口
+├── run.py  # 应用启动入口
 │
 ├── app/
-│   ├── __init__.py
-│   ├── config.py  # 配置管理，包含上传文件夹、文件大小限制等配置信息
-│   ├── routes.py  # 路由注册
-│   ├── views.py   # 页面逻辑
-│   ├── file_operations.py  # 文件操作，处理文件上传、下载等操作的逻辑
-│   ├── utils.py   # 工具函数
+│   ├── __init__.py  # 初始化 Flask 应用，注册蓝图 (blueprint)
+│   │ 
+│   ├── file/                   # 文件模块
+│   │   ├── __init__.py         # 注册 file blueprint
+│   │   ├── routes.py           # 路由注册
+│   │   ├── handlers.py         # 上传、下载、删除处理逻辑
+│   │   ├── file_operations.py  # 文件操作函数
+│   │   ├── utils.py            # 工具函数
+│   │   ├── static/
+│   │   └── templates/          # 文件模块独立模板
+│   │
+│   ├── config/
+│   │   ├── __init__.py
+│   │   ├── config.py  # 配置文件
+│   │   └── port.py    # 获取端口输入的逻辑
+│   │
+│   ├── config.py   # 配置管理
 │   ├── static/
-│   └── templates/
+│   └── templates/  # 公共模板目录
 │
 ├── uploads/
 │
