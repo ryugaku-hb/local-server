@@ -1,2 +1,1 @@
-from .config import Config
-from .config import get_runtime_config
+from .config import Config, get_runtime_config

@@ -1,6 +1,6 @@
 import os
-from .port import get_port_from_input
 
+from .port import get_port_from_input
 
 # ===== 默认配置 (可通过环境变量覆盖) =====
 
@@ -30,8 +30,8 @@ ALLOWED_EXTENSIONS = {
     "mp4",
     "mov",
     "avi",
-    'py',
-    'md'
+    "py",
+    "md",
 }
 # 会话密钥 (用于 session 和 flash 的加密)
 # 优先使用环境变量，否则自动生成随机密钥

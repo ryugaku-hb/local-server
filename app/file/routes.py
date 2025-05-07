@@ -1,5 +1,6 @@
 from . import file_bp
-from .handlers import index_page, upload_handler, download_handler, delete_handler
+from .handlers import (delete_handler, download_handler, index_page,
+                       upload_handler)
 
 # 绑定 Blueprint 路由和视图处理函数
 # Blueprint 名为 "file"，挂载在 url_prefix="/file"

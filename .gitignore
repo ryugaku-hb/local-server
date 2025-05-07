@@ -174,3 +174,4 @@ cython_debug/
 /uploads
 .DS_Store
 .vscode/settings.json
+data/posts.json

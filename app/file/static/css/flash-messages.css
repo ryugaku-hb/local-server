@@ -1,0 +1,37 @@
+/* 闪现消息的外部容器样式 */
+/* 设置为固定定位，确保不随页面滚动；位置在页面中上部居中 */
+.flash-container {
+  position: fixed; /* 固定定位，脱离文档流 */
+  top: 20px; /* 距离页面顶部 20 像素 */
+  left: 50%; /* 水平居中 */
+  transform: translateX(-50%); /* 调整水平居中对齐 */
+
+  z-index: 1055; /* 保证在页面其他元素之上显示 */
+  min-width: 300px; /* 最小宽度，确保消息框不会太窄 */
+  max-width: 600px; /* 最大宽度，防止太宽影响阅读 */
+
+  pointer-events: none; /* 容器本身不响应鼠标事件，不挡后面内容 */
+}
+
+.flash-message {
+  animation: fadeIn 0.4s ease;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  opacity: 0.8 !important;
+  transform: translateY(0);
+}
+
+.flash-message.fade-out {
+  opacity: 0 !important;
+  transform: translateY(-10px);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

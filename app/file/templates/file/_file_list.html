@@ -1,30 +1,49 @@
-{# 页面标题，显示“可供下载的文件”，并添加了上边距 #}
+{# 页面标题，显示“可供下载的文件” #}
+{# `.mt-5` margin-top 工具类 / 设置 margin-top: 3rem，即上边距 #}
 <h2 class="mt-5">可供下载的文件</h2>
-{# 创建一个无序列表，使用 Bootstrap 的 list-group 样式，`mt-4` 添加上边距 #}
+{# 创建一个无序列表 #}
+{# `.list-group` 列表组件容器类 / 把 <ul> 或 <div> 变成样式化的列表组容器 #}
+{# `.mt-4` margin-top 工具类 / 设置 margin-top: 1.5rem，稍小的上边距 #}
+{# `.shadow-sm` 阴影工具类 / 添加轻微阴影效果 #}
 <ul class="list-group mt-4 shadow-sm">
     {# 遍历文件列表 `files`，为每个文件生成一个列表项 #}
     {% for filename in files %}
-        {# 每个文件的列表项，使用 Bootstrap 的样式，使项之间的布局是水平的，并且居中对齐 #}
+        {# 每个文件的列表项 #}
         {# 使用 flexbox 排版文件名称和文件信息 #}
+        {# 使用 Bootstrap 的样式，使项之间的布局是水平的，并且居中对齐 #}
+        {# `.list-group-item` 列表项样式类 / 样式化 <li> 元素，呈现统一边框、padding 和背景 #}
+        {# `.d-flex` Flexbox 布局工具类 / 将元素设为 display: flex，开启 Flexbox 布局 #}
+        {# `.justify-content-between` Flexbox 工具类 / 子元素在主轴上两端对齐（左右分散） #}
+        {# `.align-items-center` Flexbox 工具类 / 子元素在交叉轴上垂直居中 #}
         <li class="list-group-item d-flex justify-content-between align-items-center">
-            <div class="d-flex w-75 justify-content-between align-items-center">
+            {# 文件名与文件大小容器 #}
+            {# `.w-75` 宽度工具类 / 宽度设置为其父容器的 75% #}
+            <div class="w-75 d-flex justify-content-between align-items-center">
                 {# 文件名的链接，点击后会触发下载操作 #}
-                {# `url_for` 用于生成下载链接  #}
+                {# `url_for` 动态生成 Flask 的下载链接 #}
+                {# `.text-truncate` 文本截断工具类 / 过长文本用省略号表示（需配合 max-width 限宽） #}
                 <a href="{{ url_for('file.download', filename=filename) }}"
                    class="text-truncate file-name">{{ filename }}</a>
-                {# 显示文件信息，`ms-3` 添加左边距  #}
+                {# ⚠️ TODO file-name file-info file-size 这三个没看懂 #}
+                {# 显示文件信息 #}
+                {# `.text-muted` 文字颜色类 / 显示浅灰色，常用于附加信息 #}
+                {# `.ms-3` margin-start 工具类 / 添加左边距 1rem #}
                 <div class="file-info text-muted ms-3">
                     {# 显示文件大小 #}
                     {# `get_file_size` 是一个 Python 函数，用于获取文件的大小  #}
                     <span class="file-size">{{ get_file_size(filename) }}</span>
                 </div>
             </div>
-            {# 创建删除文件的表单，`url_for` 用于生成删除文件的 URL #}
+            {# 删除按钮所在表单 #} {# 提交后向后端发送 POST 请求删除对应文件 #}
+            {# `url_for` 用于生成删除文件的 URL #}
             <form method="post"
                   action="{{ url_for('file.delete', filename=filename) }}">
                 {# 删除按钮，点击后会弹出确认对话框，确认后提交表单删除文件  #}
                 {# type="submit": 表单提交按钮 #}
                 {# onclick="return confirm('确定要删除此文件吗？')": 点击按钮时会弹出确认框，确认后才提交表单 #}
+                {# `.btn` 按钮基础类 #}
+                {# `.btn-danger` 红色按钮表示危险操作 #}
+                {# `.btn-sm` 小尺寸按钮 #}
                 <button type="submit"
                         onclick="return confirm('确定要删除此文件吗？')"
                         class="btn btn-danger btn-sm">删除</button>

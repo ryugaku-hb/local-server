@@ -1,33 +1,31 @@
 {% extends "base.html" %}
 {# 设置页面的标题 #}
-{# 此处设置的是网页的标题栏内容，指示该网页是一个本地文件服务器页面 #}
+{# 页面标签页显示的文字内容 #}
 {% block title %}
   本地文件服务器 Local File Server
 {% endblock title %}
 {% block extra_css %}
-  {# 引入外部的 CSS 样式文件，用于自定义样式 #}
+  {# 引入自定义样式文件 #}
+  {# `url_for('file.static', filename='css/styles.css')` 生成静态文件路径 #}
   <link rel="stylesheet"
-        href="{{ url_for('file.static', filename='css/styles.css') }}" />
+        href="{{ url_for('file.static', filename='css/flash-messages.css') }}" />
 {% endblock extra_css %}
-{# block content: 开始重写 base.html 中的 content 块，填充当前页面的具体内容 #}
+{# 主体内容区域 #}
+{# 重写 base.html 中的 content 块 #}
 {% block content %}
-  {# 用来显示提示消息 (如操作成功或失败)  #}
-  {# 通常这个文件用于显示一闪而过的提示信息，如 上传成功 或 删除失败 等。 #}
-  {# include "flash_messages.html": 表示将 flash_messages.html 这个文件的内容原封不动插入到这里 #}
+  {# 插入 flash 消息提示模块 #}
   {% include "file/_flash_messages.html" %}
-  {# 主标题  #}
-  {# 用的是 Bootstrap 的样式类 #}
-  {# 渲染出来就是个大标题，居中，底部带点间距，内容是: 上传和下载文件 #}
+  {# 页面主标题 #}
+  {# `.display-4` 大号标题样式类 #}
+  {# `.text-center` 文字居中 #}
+  {# `.mb-4` 添加底部 margin: 1.5rem #}
   <h1 class="display-4 text-center mb-4">上传和下载文件</h1>
-  {# 上传表单 #}
-  {# 这一行会插入一个用于上传文件的 HTML 表单，
-  通常包含 <form>、<input type="file"> 和提交按钮等内容 #}
+  {# 插入上传表单模块 #}
   {% include "file/_upload_form.html" %}
-  {# 这一行会插入显示当前已上传文件列表的 HTML 代码，
-  比如一个 <ul> 或 <table>，展示文件名、大小、下载链接等 #}
+  {# 插入文件列表模块  #}
   {% include "file/_file_list.html" %}
 {% endblock content %}
 {% block extra_js %}
   {# 引入新的 JavaScript 文件 #}
-  <script src="{{ url_for('file.static', filename='js/flash_messages.js') }}"></script>
+  <script src="{{ url_for('file.static', filename='js/flash-messages.js') }}"></script>
 {% endblock extra_js %}

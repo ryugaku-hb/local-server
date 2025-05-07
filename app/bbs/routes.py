@@ -1,5 +1,5 @@
 from . import bbs_bp
-from .handlers import index_page, new_post_handler, delete_post_handler
+from .handlers import delete_post_handler, index_page, new_post_handler
 
 
 @bbs_bp.route("/", methods=["GET"])

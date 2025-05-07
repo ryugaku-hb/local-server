@@ -1,7 +1,8 @@
 from flask import Flask, redirect, url_for
+
+from .bbs import bbs_bp
 from .config import Config
 from .file import file_bp
-from .bbs import bbs_bp
 
 
 def create_app(config: type[Config]) -> Flask:
@@ -19,6 +20,10 @@ def create_app(config: type[Config]) -> Flask:
     @app.route("/")
     def home():
         # return redirect(url_for("file.index"))
+        return redirect(url_for("bbs.index"))
+
+    @app.errorhandler(404)
+    def page_not_found(e):
         return redirect(url_for("bbs.index"))
 
     return app

@@ -1,6 +1,5 @@
 from flask import Blueprint
 
-
 bbs_bp = Blueprint(
     "bbs",
     __name__,

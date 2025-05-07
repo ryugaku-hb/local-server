@@ -1,4 +1,5 @@
-from flask import render_template, redirect, request, url_for, jsonify
+from flask import redirect, render_template, request, url_for
+
 from .models import PostModel
 
 # 初始化帖子模型
@@ -31,7 +32,7 @@ def new_post_handler():
     posts = post_model.get_all_posts()
 
     # 渲染部分 HTML 返回给客户端
-    return render_template('bbs/_post_list.html', posts=posts)
+    return render_template("bbs/_post_list.html", posts=posts)
 
 
 def delete_post_handler(post_index):

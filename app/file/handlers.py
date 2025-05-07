@@ -1,7 +1,8 @@
-from flask import render_template, request, redirect, url_for, flash, Response
-from .file_operations import save_file, download_file, delete_file
-from .utils import ensure_upload_folder_exists, get_file_size, allowed_file, get_files
+from flask import Response, flash, redirect, render_template, request, url_for
 from werkzeug.wrappers import Response as BaseResponse
+
+from .file_operations import delete_file, download_file, save_file
+from .utils import allowed_file, ensure_upload_folder_exists, get_file_size, get_files
 
 
 def index_page() -> str:
@@ -38,7 +39,7 @@ def upload_handler() -> BaseResponse:
 
     # 检查是否包含文件 part
     if "file" not in request.files:
-        flash("⚠️ 没有找到上传文件的表单字段。")
+        flash(message="⚠️ 没有找到上传文件的表单字段。", category="warning")
         return redirect(request.url)
 
     # 从请求中获取上传的文件
@@ -46,7 +47,7 @@ def upload_handler() -> BaseResponse:
 
     # 如果用户没有选择文件，file.filename 可能是空字符串
     if file.filename == "":
-        flash("⚠️ 没有选择任何文件，请重新选择。")
+        flash(message="⚠️ 没有选择任何文件，请重新选择。", category="warning")
         return redirect(request.url)
 
     # 检查文件类型是否合法
@@ -56,13 +57,13 @@ def upload_handler() -> BaseResponse:
 
         if not result.success:
             if result.error == "exists":
-                flash(f"⚠️ 文件 {result.filename} 已存在！")
+                flash(message=f"⚠️ 文件 {result.filename} 已存在！", category="warning")
         else:
-            flash(f"✅ 文件 {result.filename} 上传成功!")
+            flash(message=f"✅ 文件 {result.filename} 上传成功!", category="success")
 
         return redirect(url_for("file.index"))
     else:
-        flash("文件类型无效。请上传有效的文件。")
+        flash(message="文件类型无效。请上传有效的文件。", category="warning")
         return redirect(url_for("file.index"))
 
 
@@ -78,8 +79,11 @@ def delete_handler(filename: str) -> BaseResponse:
     result = delete_file(filename)
 
     if result.success:
-        flash(f"✅ 文件 {result.filename} 已成功删除！")
+        flash(message=f"✅ 文件 {result.filename} 已成功删除！", category="success")
     else:
-        flash(f"❌ 文件 {result.filename} 删除失败！错误信息：{result.error}")
+        flash(
+            message=f"❌ 文件 {result.filename} 删除失败！错误信息：{result.error}",
+            category="danger",
+        )
 
     return redirect(url_for("file.index"))

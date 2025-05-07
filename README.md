@@ -25,7 +25,7 @@ local-server/
 │
 ├── app/
 │   ├── __init__.py  # 初始化 Flask 应用，注册蓝图 (blueprint)
-│   │ 
+│   │
 │   ├── file/                   # 文件模块
 │   │   ├── __init__.py         # 注册 file blueprint
 │   │   ├── routes.py           # 路由注册
